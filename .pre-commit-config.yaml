@@ -21,3 +21,12 @@ repos:
         rev: v2.6.0
         hooks:
             -   id: reorder-python-imports
+
+    -   repo: local
+        hooks:
+            -   id: spotless
+                name: spotless (Java/Gradle formatting)
+                entry: ./gradlew spotlessCheck --no-daemon
+                language: system
+                pass_filenames: false
+                files: \.(java|gradle)$

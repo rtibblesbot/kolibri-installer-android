@@ -1,15 +1,15 @@
 import logging
 
 from django.utils import timezone
-from jnius import autoclass
+from java import jclass
+from java.util import Locale
 from kolibri.core.tasks.hooks import StorageHook
 from kolibri.core.tasks.job import Priority
 from kolibri.plugins import KolibriPluginBase
 from kolibri.plugins.hooks import register_hook
 
-Locale = autoclass("java.util.Locale")
-Task = autoclass("org.learningequality.Task")
-TaskWorker = autoclass("org.learningequality.Kolibri.task.TaskWorkerImpl")
+Task = jclass("org.learningequality.Kolibri.task.Task")
+TaskWorker = jclass("org.learningequality.Kolibri.task.TaskWorkerImpl")
 PROGRESS_LIMIT = 10000
 
 
@@ -29,11 +29,14 @@ class StorageHook(StorageHook):
     ):
         if orm_job.id:
 
-            delay = (
-                max(0, (orm_job.scheduled_time - timezone.now()).total_seconds())
-                if orm_job.scheduled_time
-                else 0
-            )
+            delay = 0
+            if orm_job.scheduled_time:
+                now = timezone.now()
+                scheduled = orm_job.scheduled_time
+                # Handle timezone-naive scheduled_time (make it aware in UTC)
+                if timezone.is_naive(scheduled):
+                    scheduled = timezone.make_aware(scheduled, timezone.utc)
+                delay = max(0, (scheduled - now).total_seconds())
 
             high_priority = orm_job.priority <= Priority.HIGH
 

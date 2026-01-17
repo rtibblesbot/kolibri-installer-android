@@ -34,7 +34,7 @@
         android:icon="@mipmap/icon"
         android:allowBackup="true"
         android:name=".App"
-        android:theme="@android:style/Theme.NoTitleBar"
+        android:theme="@style/AppTheme"
         android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"
         >
@@ -42,13 +42,15 @@
 
         <meta-data android:name="wakelock" android:value="0"/>
 
+        <!-- Main WebView Activity -->
         <activity
-            android:name="org.kivy.android.PythonActivity"
-            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale|uiMode|uiMode|screenSize|smallestScreenSize|layoutDirection"
+            android:name=".WebViewActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|fontScale|uiMode|screenSize|smallestScreenSize|layoutDirection"
             android:screenOrientation="unspecified"
             android:exported="true"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppTheme.Fullscreen"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,18 +58,11 @@
             </intent-filter>
         </activity>
 
-
+        <!-- Kolibri Server Service -->
         <service
-            android:name="org.learningequality.Kolibri.ServiceRemoteshell"
-            android:permission=""
-            android:exported="true"
-            android:process=":service_remoteshell"
-            >
-            <intent-filter>
-                <action android:name="org.learningequality.Kolibri.START_REMOTESHELL" />
-
-            </intent-filter>
-        </service>
+            android:name=".KolibriServerService"
+            android:exported="false"
+            />
 
         <service
             android:name=".WorkControllerService"
@@ -110,6 +105,17 @@
                 android:value="androidx.startup"
                 tools:node="remove"
                 />
+        </provider>
+
+        <!-- FileProvider for sharing files via Intent -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
 
     </application>
