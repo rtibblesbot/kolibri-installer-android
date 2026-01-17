@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Kolibri yellow brand color for splash screen -->
+    <color name="kolibri_yellow">#FFCB00</color>
+
+    <!--
+        Minimal AppCompat theme - satisfies Android requirements but stays invisible.
+        All visual theming is handled by Kolibri's web interface.
+    -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- White window background for most screens -->
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!--
+        WebView theme with splash screen - shows yellow background immediately on launch.
+        The splash ImageView displays the Kolibri logo until the WebView is ready.
+    -->
+    <style name="AppTheme.Fullscreen" parent="AppTheme">
+        <item name="android:windowContentOverlay">@null</item>
+        <!-- Yellow background shows immediately while activity loads -->
+        <item name="android:windowBackground">@color/kolibri_yellow</item>
+    </style>
+</resources>
